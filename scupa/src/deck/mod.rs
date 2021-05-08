@@ -1,7 +1,6 @@
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
-
 #[derive(Debug, Copy, Clone)]
 pub enum Suit {
     Bastoni,
@@ -53,5 +52,9 @@ impl Deck {
     pub fn shuffle(&mut self) {
         let mut rng = thread_rng();
         self._deck.shuffle(&mut rng);
+    }
+
+    pub fn left(&self) -> usize {
+        self._deck.len()
     }
 }

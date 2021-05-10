@@ -26,52 +26,64 @@ impl std::fmt::Display for Card {
     }
 }
 
+pub struct Stash {
+    cards: Vec<Card>,
+}
+
+impl Stash {
+    pub fn new() -> Stash {
+        let stash: Vec<Card> = Vec::new();
+
+        Stash { cards: stash }
+    }
+
+    pub fn add(&mut self, card: Card) {
+        self.cards.push(card);
+    }
+}
+
 pub struct Deck {
-    _deck: Vec<Card>,
+    cards: Vec<Card>,
 }
 
 impl Deck {
     pub fn new() -> Deck {
-        let mut deck = Vec::with_capacity(40);
+        let mut cards = Vec::with_capacity(40);
         let suits = vec![Suit::Bastoni, Suit::Coppe, Suit::Denari, Suit::Mazze];
         for suit in suits {
             for i in 0..10 {
-                deck.push(Card {
-                    value: i + 1,
-                    suit: suit,
-                });
+                cards.push(Card { value: i + 1, suit });
             }
         }
-        Deck { _deck: deck }
+        Deck { cards }
     }
 
     pub fn draw(&mut self) -> Option<Card> {
-        self._deck.pop()
+        self.cards.pop()
     }
-    pub fn draw_many(&mut self, cards: usize) -> Vec<Card> {
-        let mut hand: Vec<Card> = Vec::new();
-        if cards < 1 {
-            return hand;
+
+    pub fn draw_many(&mut self, cards: usize) -> Option<Vec<Card>> {
+        if cards < 1 || self.left() < cards {
+            return None;
         }
 
-        hand.reserve(cards);
+        let mut hand: Vec<Card> = Vec::with_capacity(cards);
 
         for _ in 0..cards {
-            match self.draw() {
-                Some(card) => hand.push(card),
-                None => {}
+            if let Some(card) = self.draw() {
+                hand.push(card)
             }
         }
 
-        hand
+        Some(hand)
     }
 
     pub fn shuffle(&mut self) {
         let mut rng = thread_rng();
-        self._deck.shuffle(&mut rng);
+        self.cards.shuffle(&mut rng);
     }
 
     pub fn left(&self) -> usize {
-        self._deck.len()
+        self.cards.len()
     }
 }

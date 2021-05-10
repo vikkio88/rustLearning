@@ -48,6 +48,23 @@ impl Deck {
     pub fn draw(&mut self) -> Option<Card> {
         self._deck.pop()
     }
+    pub fn draw_many(&mut self, cards: usize) -> Vec<Card> {
+        let mut hand: Vec<Card> = Vec::new();
+        if cards < 1 {
+            return hand;
+        }
+
+        hand.reserve(cards);
+
+        for _ in 0..cards {
+            match self.draw() {
+                Some(card) => hand.push(card),
+                None => {}
+            }
+        }
+
+        hand
+    }
 
     pub fn shuffle(&mut self) {
         let mut rng = thread_rng();

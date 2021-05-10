@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'scupa'",
+            "cargo": {
+                "args": [
+                    "build"
+                ],
+                "filter": {
+                    "name": "scupa",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "program": "${workspaceFolder}/target/debug/scupa",
+            "cwd": "${workspaceFolder}/target/debug/",
+            "sourceLanguages": [
+                "rust"
+            ]
+        }
+    ]
+}

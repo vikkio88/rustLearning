@@ -22,7 +22,7 @@ pub struct Card {
 
 impl std::fmt::Display for Card {
     fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(fmt, "{} {}", self.value, self.suit)
+        write!(fmt, "{} {}", &self.value, self.suit)
     }
 }
 

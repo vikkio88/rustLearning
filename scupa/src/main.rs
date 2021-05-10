@@ -7,13 +7,15 @@ fn main() {
     let hand = deck.draw_many(3);
     println!("Hand:");
     match hand {
-        Some(hand) => {
+        Some(ref hand) => {
             for card in hand {
                 println!("\t{}", card);
             }
         }
         None => println!("No cards drawn"),
     }
+    let first = &hand.unwrap()[1];
+    println!("{}", first.value);
 
     println!("cards left: {}", deck.left());
 }

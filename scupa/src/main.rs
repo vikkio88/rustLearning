@@ -1,21 +1,28 @@
 mod deck;
-use deck::Deck;
+use deck::{Deck, Stash};
 
 fn main() {
     let mut deck = Deck::new();
+    let mut discard_pile = Stash::new();
+
     deck.shuffle();
     let hand = deck.draw_many(3);
     println!("Hand:");
     match hand {
-        Some(ref hand) => {
-            for card in hand {
-                println!("\t{}", card);
+        Some(mut hand) => {
+            for _ in 0..hand.len() {
+                match hand.pop() {
+                    Some(card) => {
+                        println!("{}", card);
+                        discard_pile.add(card);
+                        println!("cards left in hand: {}", hand.len());
+                    }
+                    None => println!("No more cards"),
+                };
             }
         }
         None => println!("No cards drawn"),
     }
-    let first = &hand.unwrap()[1];
-    println!("{}", first.value);
 
     println!("cards left: {}", deck.left());
 }

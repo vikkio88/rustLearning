@@ -71,7 +71,7 @@ impl Deck {
 
         for _ in 0..cards {
             if let Some(card) = self.draw() {
-                hand.push(card)
+                hand.push(card);
             }
         }
 

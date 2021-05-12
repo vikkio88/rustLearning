@@ -1,5 +1,5 @@
-mod deck;
-use deck::{Deck, Stash};
+mod mazzu;
+use mazzu::{Deck, Stash};
 
 fn main() {
     let mut deck = Deck::new();

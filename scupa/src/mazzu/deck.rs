@@ -25,7 +25,7 @@ impl Deck {
     }
 
     pub fn draw_many(&mut self, cards: usize) -> Option<Vec<Card>> {
-        if cards < 1 || self.left() < cards {
+        if cards < 1 || self.len() < cards {
             return None;
         }
 
@@ -45,7 +45,7 @@ impl Deck {
         self.cards.shuffle(&mut rng);
     }
 
-    pub fn left(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.cards.len()
     }
 }

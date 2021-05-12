@@ -3,6 +3,9 @@ mod card;
 pub use card::Card;
 pub use card::Suit;
 
+mod hand;
+pub use hand::Hand;
+
 mod stash;
 pub use stash::Stash;
 

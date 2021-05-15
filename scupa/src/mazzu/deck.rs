@@ -4,6 +4,10 @@ use super::Suit;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
+#[cfg(test)]
+#[path = "./deck_tests.rs"]
+mod deck_tests;
+
 pub struct Deck {
     cards: Vec<Card>,
 }

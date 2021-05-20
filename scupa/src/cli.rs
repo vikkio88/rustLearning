@@ -5,10 +5,11 @@ pub fn print_menu() {
         r#"
     1) Print Hand
     2) Cards Left
-    3) Print Discard Pile (not implemented)
+    3) Shuffle
+    4) Print Discard Pile (not implemented)
 
-    4) Draw 1
-    5) Draw 2
+    5) Draw 1
+    6) Draw 2
     
 
     0) quit
@@ -37,7 +38,7 @@ pub fn choose() -> u8 {
 }
 
 pub fn wait_enter() {
-    println!("\n\n...[Enter]...");
+    println!("\n\n...[Press Enter]");
     let _ = stdout().flush();
     let mut buf = String::new();
     stdin().read_line(&mut buf).unwrap();

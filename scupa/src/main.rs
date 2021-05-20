@@ -1,28 +1,30 @@
 mod mazzu;
 use mazzu::{Deck, Hand, Stash};
 
+mod cli;
+
 fn main() {
     let mut deck = Deck::new();
     let mut hand = Hand::new();
     let mut discard_pile = Stash::new();
 
-    deck.shuffle();
-    let cards = deck.draw_many(3);
-    if let Some(mut cards) = cards {
-        hand.add_many(&mut cards)
-    }
+    let mut choice = 1;
 
-    println!("Hand:");
-    for _ in 0..hand.len() {
-        match hand.cards.pop() {
-            Some(card) => {
-                println!("{}", card);
-                discard_pile.add(card);
-                println!("cards left in hand: {}", hand.len());
-            }
-            None => println!("No more cards"),
+    while choice != 0 {
+        cli::print_menu();
+        choice = cli::choose();
+
+        match choice {
+            1 => cli::print_hand(&hand),
+            2 => cli::print_deck_info(&deck),
+            4 => cli::draw(1, &mut deck, &mut hand),
+            5 => cli::print_deck_info(&deck),
+            0 => continue,
+            _ => {}
         }
+
+        cli::wait_enter();
     }
 
-    println!("cards left: {}", deck.len());
+    println!("kthxbye ;)\n\n");
 }

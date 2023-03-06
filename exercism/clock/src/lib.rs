@@ -18,16 +18,23 @@ const DAY_MINUTES: i32 = HOURS_IN_DAY * MINUTES_IN_HOURS;
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let corrected_minutes = (DAY_MINUTES + minutes) % DAY_MINUTES;
         let minutes_hours = ((HOURS_IN_DAY + hours) % HOURS_IN_DAY) * MINUTES_IN_HOURS;
+        let mut corrected_minutes = (DAY_MINUTES + minutes) % DAY_MINUTES;
+        corrected_minutes = (corrected_minutes + minutes_hours) % DAY_MINUTES;
+        while corrected_minutes < 0 {
+            corrected_minutes += DAY_MINUTES;
+        }
 
         Clock {
-            minutes: (corrected_minutes + minutes_hours) % DAY_MINUTES,
+            minutes: corrected_minutes,
         }
     }
 
     pub fn add_minutes(mut self, minutes: i32) -> Self {
-        let new_minutes = (DAY_MINUTES + self.minutes + minutes) % DAY_MINUTES;
+        let mut new_minutes = (DAY_MINUTES + self.minutes + minutes) % DAY_MINUTES;
+        while new_minutes < 0 {
+            new_minutes += DAY_MINUTES;
+        }
         self.minutes = new_minutes;
         self
     }

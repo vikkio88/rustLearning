@@ -18,7 +18,7 @@ const DAY_MINUTES: i32 = HOURS_IN_DAY * MINUTES_IN_HOURS;
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let minutes_hours = hours * MINUTES_IN_HOURS;
+        let minutes_hours = ((HOURS_IN_DAY + hours) % HOURS_IN_DAY) * MINUTES_IN_HOURS;
 
         Clock {
             minutes: (minutes + minutes_hours) % DAY_MINUTES,

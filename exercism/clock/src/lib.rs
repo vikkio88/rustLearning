@@ -2,44 +2,37 @@ use core::fmt;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct Clock {
-    hours: i32,
     minutes: i32,
 }
 
 impl fmt::Display for Clock {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:0>2}:{:0>2}", self.hours, self.minutes)
+        let (hour, minutes) = self.hour_minute();
+        write!(f, "{:0>2}:{:0>2}", hour, minutes)
     }
 }
 
-fn convert(hours: i32, minutes: i32) -> (i32, i32) {
-    let mut new_hours = hours % 12;
-}
+const HOURS_IN_DAY: i32 = 24;
+const MINUTES_IN_HOURS: i32 = 60;
+const DAY_MINUTES: i32 = HOURS_IN_DAY * MINUTES_IN_HOURS;
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let new_minutes = minutes % 60;
-        let mut new_hours = hours;
-
-        if minutes > 60 {
-            new_hours += minutes / 60;
-        }
+        let minutes_hours = hours * MINUTES_IN_HOURS;
 
         Clock {
-            hours: new_hours % 24,
-            minutes: new_minutes,
+            minutes: (minutes + minutes_hours) % DAY_MINUTES,
         }
     }
 
     pub fn add_minutes(mut self, minutes: i32) -> Self {
-        let base = self.minutes + minutes;
-        let new_minutes = base % 60;
-
-        if minutes > 60 {
-            self.hours += minutes / 60;
-        }
-        self.minutes = new_minutes;
-
+        self.minutes += minutes;
         self
+    }
+
+    pub fn hour_minute(&self) -> (i32, i32) {
+        let hours = self.minutes / MINUTES_IN_HOURS;
+        let remaining = self.minutes - (hours * MINUTES_IN_HOURS);
+        (hours, remaining)
     }
 }

@@ -26,7 +26,8 @@ impl Clock {
     }
 
     pub fn add_minutes(mut self, minutes: i32) -> Self {
-        self.minutes += minutes;
+        let new_minutes = (self.minutes + minutes) % DAY_MINUTES;
+        self.minutes = new_minutes;
         self
     }
 

@@ -11,22 +11,20 @@ pub fn can_construct_note(magazine: &[&str], note: &[&str]) -> bool {
     for word in magazine {
         let cleaned_word = word.replace(&['(', ')', ',', '\"', '.', ';', ':', '\''], "");
         for letter in cleaned_word.chars() {
-            let mut entry = letters_owned.entry(letter).or_insert(0);
-            *entry += 1;
+            *letters_owned.entry(letter).or_insert(0) += 1;
         }
     }
 
     for word in note {
         let cleaned_word = word.replace(&['(', ')', ',', '\"', '.', ';', ':', '\''], "");
         for letter in cleaned_word.chars() {
-            let mut entry = letters_needed.entry(letter).or_insert(0);
-            *entry += 1;
+            *letters_needed.entry(letter).or_insert(0) += 1;
         }
     }
 
     for (letter, count) in letters_needed.iter() {
-        if (*letters_owned.get(letter).unwrap_or(&0) < *count)
-        {
+        let owned = *letters_owned.get(letter).unwrap_or(&0);
+        if (owned < *count) {
             return false;
         }
     }

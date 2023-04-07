@@ -26,14 +26,15 @@ fn main() {
         ),
     ];
 
-
-
-    let num = req_i("gimme numer:");
-    println!("you chose {num}");
-
     let username = req_str("username:");
     let password = req_str("password:");
 
-    println!("{}", authenticate(username, password, &users).unwrap());
+    let login_result = authenticate(username, password, &users);
 
+    if login_result.is_none() {
+        println!("Login Failed");
+        return;
+    }
+
+    println!("logged in:\n\t{}", login_result.unwrap());
 }

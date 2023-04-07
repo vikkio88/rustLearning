@@ -1,19 +1,9 @@
 [package]
-name = "guess_number"
+name = "guess_game"
 version = "0.1.0"
-authors = ["Vincenzo Ciaccio <some@email.com>"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.0"
-
-
-# This ↓ allows to strip the release build from 4Mb to 1.4Mb
-[profile.release]
-opt-level = 3
-lto = true
-debug = false
-codegen-units = 1
-panic = "abort"
+rand = "0.8.5"

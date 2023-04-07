@@ -1,39 +1,57 @@
-use rand::prelude::*;
-use std::io::{stdin, stdout, Write};
+use std::{cmp::Ordering, io};
+
+use rand::Rng;
+
+const MAX_ATTEMPTS: i8 = 3;
 
 fn main() {
-    let mut attemps: u8 = 3;
-    let number: u8 = (random::<f32>() * 10.) as u8 % 10 + 1;
-    println!(
-        "Yo I thought of a number between 1-10, you have {} chances to guess",
-        attemps
-    );
-    let mut choice: u8;
-    while attemps > 0 {
-        choice = choose();
-        if choice == number {
-            println!("Yo got it it was {}", choice);
-            break;
-        } else {
-            attemps -= 1;
-            println!(
-                "nope, it wasnt {}, my number is {} (attempts left: {})",
-                choice,
-                if choice > number { "lower" } else { "higher" },
-                attemps
-            );
-        }
-    }
+    println!("I am thinking of a number...");
+    let number: u32 = rand::thread_rng().gen_range(0..=100);
+    let mut reamining_guesses = MAX_ATTEMPTS;
+    println!("You have {MAX_ATTEMPTS} guesses.");
+    loop {
+        println!("Guesses left {reamining_guesses} / {MAX_ATTEMPTS}");
+        println!("Guess: ");
+        let mut guess = String::new();
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read input!");
 
-    if attemps == 0 {
-        println!("Ah too bad mate, it was {}", number);
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Hey! That is not a number!");
+                continue;
+            }
+        };
+
+        println!("You guessed {guess}");
+        reamining_guesses -= 1;
+
+        if check_result(&guess, &number) {
+            break;
+        }
+
+        if reamining_guesses <= 0 {
+            println!("You have no guesses left.\n the number was {number}\n GAME OVER!");
+            break;
+        }
     }
 }
 
-fn choose() -> u8 {
-    print!("Choose > ");
-    let _ = stdout().flush();
-    let mut buf = String::new();
-    stdin().read_line(&mut buf).unwrap();
-    buf.trim().parse::<u8>().unwrap_or(0)
+fn check_result(guess: &u32, number: &u32) -> bool {
+    match guess.cmp(number) {
+        Ordering::Equal => {
+            println!("You guessed it right! The number was {number}");
+            true
+        }
+        Ordering::Greater => {
+            println!("Your guess is too high!");
+            false
+        }
+        Ordering::Less => {
+            println!("Your guess is too low!");
+            false
+        }
+    }
 }

@@ -1,4 +1,4 @@
-use std::{fmt::Display, process::Output, slice::RChunksExact};
+use std::fmt::Display;
 
 const MULTIPLIER_100: i32 = 100;
 const MULTIPLIER_100F: f32 = 100.0;

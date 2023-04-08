@@ -9,7 +9,7 @@ pub struct User {
     pub username: String,
     password: String,
     full_name: String,
-    balance: Money,
+    pub balance: Money,
 }
 
 impl User {
@@ -49,7 +49,7 @@ impl Display for User {
 #[derive(Clone)]
 pub struct Money {
     val: i32,
-    currency: Currency,
+    pub currency: Currency,
 }
 
 impl Money {

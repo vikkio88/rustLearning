@@ -2,7 +2,7 @@ use libs::authenticate;
 // use interactor::{pick_from_list, default_menu_cmd};
 use models::{Money, User};
 
-use crate::libs::console::{cls, req_i, req_str};
+use crate::libs::console::{cls, etc, req_i, req_str};
 
 mod libs;
 mod models;
@@ -10,6 +10,7 @@ mod models;
 enum AppState {
     Login,
     Dashboard(User),
+    Quit,
 }
 
 fn main() {
@@ -29,6 +30,10 @@ fn main() {
         state = match state {
             AppState::Login => login(&users),
             AppState::Dashboard(user) => dashboard(user),
+            AppState::Quit => {
+                println!("Bye!\n");
+                break;
+            }
         };
     }
 }
@@ -50,13 +55,21 @@ fn login(users: &Vec<User>) -> AppState {
 }
 
 fn dashboard(user: User) -> AppState {
-    cls();
-    println!("Dashboard\n\n\tWelcome {}", user.username);
+    let mut user = user;
 
     let mut choice = -1;
-    while choice < 0 {
-        println!("menu:\n\t0. Logout");
-        choice = req_i("[0-1]");
+    while choice != 0 {
+        cls();
+        println!("Dashboard\n\n\tWelcome {}", user.username);
+        println!("menu:\n1. View Funds\n2. Withdraw\n3. Deposit\n\t0. Logout");
+        choice = req_i("[0-3]");
+
+        match choice {
+            1 => view_funds(&user),
+            2 => withdraw(&mut user),
+            3 => deposit(&mut user),
+            _ => (),
+        };
     }
 
     match choice {
@@ -67,3 +80,17 @@ fn dashboard(user: User) -> AppState {
         _ => AppState::Dashboard(user),
     }
 }
+
+fn view_funds(user: &User) {
+    cls();
+    println!("Balance: {}", user.balance);
+    etc();
+}
+fn withdraw(user: &mut User) {
+    let amount = Money::from_unit(10, user.balance.currency.clone());
+    user.withdraw(amount.clone());
+    cls();
+    println!("Withdrew {}", amount);
+    etc();
+}
+fn deposit(user: &mut User) {}

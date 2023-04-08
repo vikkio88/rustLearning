@@ -4,6 +4,10 @@ pub fn cls() {
     print!("{}[2J", 27 as char);
 }
 
+pub fn etc() {
+    _ = req_str("Enter to Continue");
+}
+
 pub fn req_str(prompt: &str) -> String {
     loop {
         let mut input = String::new();

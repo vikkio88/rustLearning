@@ -1,4 +1,4 @@
-use libs::authenticate;
+use libs::{authenticate, console::ctc};
 // use interactor::{pick_from_list, default_menu_cmd};
 use models::{Money, User};
 
@@ -13,7 +13,13 @@ enum AppState {
     Quit,
 }
 
+fn cleanup() {
+    println!("running cleanup...");
+    println!("cleanup done.");
+}
+
 fn main() {
+    ctc(cleanup);
     let users = vec![
         User::new(
             "Mario Rossi".into(),
@@ -29,7 +35,11 @@ fn main() {
     loop {
         state = match state {
             AppState::Login => login(&users),
-            AppState::Dashboard(user) => dashboard(user),
+            AppState::Dashboard(user) => {
+                let newstate = dashboard(user);
+                // I want also to return user here
+                newstate
+            }
             AppState::Quit => {
                 println!("Bye!\n");
                 break;
@@ -88,9 +98,18 @@ fn view_funds(user: &User) {
 }
 fn withdraw(user: &mut User) {
     let amount = Money::from_unit(10, user.balance.currency.clone());
-    user.withdraw(amount.clone());
+    let am_str = amount.to_string();
+    user.withdraw(amount);
     cls();
-    println!("Withdrew {}", amount);
+    println!("Withdrew {}", am_str);
     etc();
 }
-fn deposit(user: &mut User) {}
+fn deposit(user: &mut User) {
+    let amount = Money::from_unit(10, user.balance.currency.clone());
+    let am_str = amount.to_string();
+    user.deposit(amount);
+
+    cls();
+    println!("Deposited {}", am_str);
+    etc();
+}

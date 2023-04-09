@@ -8,6 +8,16 @@ pub fn etc() {
     _ = req_str("Enter to Continue");
 }
 
+pub fn ctc(cleanup: fn() -> ()) {
+    ctrlc::set_handler(move || {
+        println!("\n\nreceived SIGTERM\nclosing app.\n");
+        cleanup();
+        println!("app shutting down. bye!\n\n");
+        std::process::exit(0);
+    })
+    .expect("Error setting Ctrl-C handler");
+}
+
 pub fn req_str(prompt: &str) -> String {
     loop {
         let mut input = String::new();

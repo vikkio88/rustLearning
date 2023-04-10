@@ -78,7 +78,10 @@ fn dashboard(user: User) -> AppState {
             1 => view_funds(&user),
             2 => withdraw(&mut user),
             3 => deposit(&mut user),
-            _ => (),
+            _ => {
+                println!("{} is not a valid choice", choice);
+                etc();
+            }
         };
     }
 
@@ -97,19 +100,44 @@ fn view_funds(user: &User) {
     etc();
 }
 fn withdraw(user: &mut User) {
-    let amount = Money::from_unit(10, user.balance.currency.clone());
+    let unit = req_pos_amount(
+        format!(
+            "how much {} you want to withdraw?",
+            user.balance.currency.clone()
+        )
+        .as_str(),
+    );
+    let amount = Money::from_unit(unit, user.balance.currency.clone());
     let am_str = amount.to_string();
     user.withdraw(amount);
-    cls();
-    println!("Withdrew {}", am_str);
+    println!("\nWithdrew {}", am_str);
     etc();
 }
 fn deposit(user: &mut User) {
-    let amount = Money::from_unit(10, user.balance.currency.clone());
+    let unit = req_pos_amount(
+        format!(
+            "how much {} you want to deposit?",
+            user.balance.currency.clone()
+        )
+        .as_str(),
+    );
+    let amount = Money::from_unit(unit, user.balance.currency.clone());
     let am_str = amount.to_string();
     user.deposit(amount);
 
-    cls();
-    println!("Deposited {}", am_str);
+    println!("\nDeposited {}", am_str);
     etc();
+}
+
+fn req_pos_amount(prompt: &str) -> i32 {
+    let mut unit = -1;
+    while unit <= 0 {
+        unit = req_i(prompt);
+
+        if unit <= 0 {
+            println!("\n\tError: it has to be an amount > 0");
+        }
+    }
+
+    return unit;
 }

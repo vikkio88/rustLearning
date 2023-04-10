@@ -5,7 +5,7 @@ const MULTIPLIER_100F: f32 = 100.0;
 
 #[derive(Clone)]
 pub struct User {
-    id: String,
+    pub id: String,
     pub username: String,
     password: String,
     full_name: String,

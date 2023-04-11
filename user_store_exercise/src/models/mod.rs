@@ -1,15 +1,23 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
 const MULTIPLIER_100: i32 = 100;
 const MULTIPLIER_100F: f32 = 100.0;
 
-#[derive(Clone)]
+#[derive(Serialize, Deserialize, Clone)]
+enum UserType {
+    User,
+    Admin,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
 pub struct User {
     pub id: String,
     pub username: String,
     password: String,
     full_name: String,
     pub balance: Money,
+    kind: UserType,
 }
 
 impl User {
@@ -24,11 +32,16 @@ impl User {
                 .replace(" ", ".")
                 .to_lowercase(),
             password: "qwerty".into(),
+            kind: UserType::User,
         }
     }
 
     pub fn check_password(&self, password: String) -> bool {
         self.password == password
+    }
+
+    pub fn change_password(&mut self, new_password: String) {
+        self.password = new_password;
     }
 
     pub fn deposit(&mut self, amount: Money) {
@@ -46,7 +59,7 @@ impl Display for User {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Money {
     val: i32,
     pub currency: Currency,
@@ -146,7 +159,7 @@ fn test_money_to_str() {
     assert_eq!("£150.25", format!("{}", more_pounds));
 }
 
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, Serialize, Deserialize)]
 pub enum Currency {
     Dollar,
     Euro,
